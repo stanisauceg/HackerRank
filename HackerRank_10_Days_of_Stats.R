@@ -28,7 +28,8 @@ data %>% mutate(pairs = Freq %/% 2) %>% summarise(tot_pairs = sum(pairs)) %>% un
 
 ## Day 1: Quartiles ----
 
-data <- suppressWarnings(readLines(file("stdin"),-1))
+# read from the connection using readLines
+data <- suppressWarnings(readLines(file("stdin"),-1L))
 n1  <- as.numeric(unlist(strsplit(data[2]," ")))
 get.quarts <- function(x) {
   x <- sort(x)
