@@ -441,21 +441,26 @@ multLinReg <- function(data) {
   n <- data_list[[1]][[2]]
   q <- data_list[[n + 2]]
   
+  # hack it apart
   train <- data_list[2:(n+1)]
   test <- data_list[(n+3):(n+2+q)]
   
-  train <- data.frame(matrix(unlist(train), nrow=n, byrow=T)) %>% as_tibble()
-  test <- data.frame(matrix(unlist(test), nrow=q, byrow=T)) %>% as_tibble()
+  # turn into a tibble
+  train <- data.frame(matrix(unlist(train), nrow = n, byrow = TRUE)) %>% as_tibble()
+  test <- data.frame(matrix(unlist(test), nrow = q, byrow = TRUE)) %>% as_tibble()
   
+  # name the variables (per tibble conventions)
   independent <- paste0("X", 1:m)
   dependent <- paste0("X", m+1)
   
+  # build a model call for lm() to use
   fmla <- as.formula(paste(dependent, "~ ", paste(independent, collapse= "+")))
   
+  # fit model, generate predictions, cat the output
   mlm <- lm(fmla, data = train)
   preds <- predict(mlm, test)
   out <- format(round(preds, 2), nsmall = 2)
-  map(out, ~cat(., "\n"))[[1:q]]
+  map(out, ~cat(., "\n"))[[1:q]] # ignore the chaff at the end... HackerRank is really not the place to learn about connections
 }
 
 multLinReg(data)
